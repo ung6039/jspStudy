@@ -135,6 +135,186 @@ public class BoardDAO {
 		  disConnection();
 	  }
   }
+  // 내용보기(조회수증가) type=0 => 수정하기 (데이터 읽기) type=1 
+  public BoardVO boardDetailData(int no,int type)
+  {
+	  BoardVO vo=new BoardVO();
+	  try
+	  {
+		  getConnection();
+		  String sql="";
+		  if(type==0)// 조회수 증가 
+		  {
+			  sql="UPDATE replyBoard SET "
+			     +"hit=hit+1 "
+				 +"WHERE no=?";
+			  ps=conn.prepareStatement(sql);
+			  ps.setInt(1, no);
+			  ps.executeUpdate();
+			  ps.close();
+		  }
+		  // 상세보기 , 수정하기 
+		  sql="SELECT no,name,subject,content,regdate,hit "
+			 +"FROM replyBoard "
+			 +"WHERE no=?";
+		  ps=conn.prepareStatement(sql);
+		  ps.setInt(1, no);
+		  // 데이터 읽기 시작 
+		  ResultSet rs=ps.executeQuery();
+		  rs.next();
+		  
+		  // VO에 값을 저장 
+		  vo.setNo(rs.getInt(1));
+		  vo.setName(rs.getString(2));
+		  vo.setSubject(rs.getString(3));
+		  vo.setContent(rs.getString(4));
+		  vo.setRegdate(rs.getDate(5));
+		  vo.setHit(rs.getInt(6));
+		  
+		  rs.close();
+	  }catch(Exception ex)
+	  {
+		  ex.printStackTrace();
+	  }
+	  finally
+	  {
+		  disConnection();
+	  }
+	  return vo;
+  }
+  // 수정
+  public boolean boardUpdate(BoardVO vo)
+  {
+	  boolean bCheck=false;
+	  try
+	  {
+		  getConnection();
+		  String sql="SELECT pwd FROM replyBoard "
+				    +"WHERE no=?";
+		  ps=conn.prepareStatement(sql);
+		  ps.setInt(1, vo.getNo());
+		  ResultSet rs=ps.executeQuery();
+		  rs.next();
+		  String db_pwd=rs.getString(1);
+		  rs.close();
+		  
+		  if(db_pwd.equals(vo.getPwd()))
+		  {
+			  bCheck=true;
+			  sql="UPDATE replyBoard SET "
+				 +"name=?,subject=?,content=? "
+				 +"WHERE no=?";
+			  
+			  ps=conn.prepareStatement(sql);
+			  ps.setString(1, vo.getName());
+			  ps.setString(2, vo.getSubject());
+			  ps.setString(3, vo.getContent());
+			  ps.setInt(4, vo.getNo());
+			  
+			  // 실행 
+			  ps.executeUpdate(); // commit
+		  }
+		  else
+		  {
+			  bCheck=false;
+		  }
+		  
+	  }catch(Exception ex)
+	  {
+		  ex.printStackTrace();
+	  }
+	  finally
+	  {
+		  disConnection();
+	  }
+	  return bCheck;
+  }
+  // 삭제
+  // 답변하기 
+  public void replyInsert(int pno,BoardVO vo)
+  {
+	  try
+	  {
+		  getConnection();
+		  
+		  conn.setAutoCommit(false);
+		  
+		  // gi,gs,gt 
+		  String sql="SELECT group_id,group_step,group_tab "
+				    +"FROM replyBoard "
+				    +"WHERE no=?";
+		  ps=conn.prepareStatement(sql);
+		  ps.setInt(1, pno);
+		  ResultSet rs=ps.executeQuery();
+		  rs.next();
+		  int gi=rs.getInt(1);
+		  int gs=rs.getInt(2);
+		  int gt=rs.getInt(3);
+		  rs.close();
+		  
+		  // 답변형 게시판의 핵심 쿼리 
+		  /*
+		   *             gi    gs    gt   depth
+		   *  AAAAA       1     0     0     4
+		   *    =>PPPPP   1     1     1     0
+		   *    =>KKKKK   1     2     1     0
+		   *    =>FFFF    1     3     1     0
+		   *    =>BBBB    1     4     1     1
+		   *     =>CCCC   1     5     2     1
+		   *      =>DDDD  1     6     3     0
+		   *    
+		   */
+		  sql="UPDATE replyBoard SET "
+		     +"group_step=group_step+1 "
+		     +"WHERE group_id=? AND group_step>?";
+		  ps=conn.prepareStatement(sql);
+		  ps.setInt(1, gi);
+		  ps.setInt(2, gs);
+		  ps.executeUpdate();
+		  
+		  // 데이터 추가 
+		  sql="INSERT INTO replyBoard(no,name,subject,content,pwd,group_id,group_step,group_tab,root) VALUES("
+		     +"rb_no_seq.nextval,?,?,?,?,?,?,?,?)";
+		  ps=conn.prepareStatement(sql);
+		  ps.setString(1, vo.getName());
+		  ps.setString(2, vo.getSubject());
+		  ps.setString(3, vo.getContent());
+		  ps.setString(4, vo.getPwd());
+		  ps.setInt(5, gi);
+		  ps.setInt(6, gs+1);
+		  ps.setInt(7, gt+1);
+		  ps.setInt(8, pno);
+		  ps.executeUpdate();
+		  // depth 증가 
+		  
+		  sql="UPDATE replyBoard SET "
+			 +"depth=depth+1 "
+			 +"WHERE no=?";
+		  
+		  ps=conn.prepareStatement(sql);
+		  ps.setInt(1, pno);
+		  ps.executeUpdate();
+		  
+		  conn.commit();
+		  
+	  }catch(Exception ex)
+	  {
+		  ex.printStackTrace();
+		  try
+		  {
+			  conn.rollback();
+		  }catch(Exception e){}
+	  }
+	  finally
+	  {
+		  try
+		  {
+			  conn.setAutoCommit(true);
+		  }catch(Exception ex){}
+		  disConnection();
+	  }
+  }
+  
 }
 
 

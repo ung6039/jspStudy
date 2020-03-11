@@ -72,7 +72,7 @@ h2 {
 		          <%
 		              }
 		          %>
-		          <%=vo.getSubject() %>
+		          <a href="detail.jsp?no=<%=vo.getNo()%>&page=<%=curpage%>"><%=vo.getSubject() %></a>
 		          <%
 		              String today=new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 		              if(today.equals(vo.getRegdate().toString()))

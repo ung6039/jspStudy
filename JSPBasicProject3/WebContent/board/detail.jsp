@@ -25,6 +25,98 @@ h2 {
   text-align: center;
 }
 </style>
+<script type="text/javascript" src="http://code.jquery.com/jquery.js"></script>
+<script type="text/javascript">
+// window.onload 
+/*
+ *    window.onload=function()
+      {
+	
+      }
+ */
+var i=0;
+
+$(function(){
+	// function delClick(){}
+	// $('#delBtn') =====> document.getElementById("delBtn");
+	// Selector  
+	/*
+	     태그명   td{}    ==== $("td")
+	     ID #id{}   ==== $("#id명")
+	  Class .class{} ===> $('.class명')
+	  
+	    => <a>bbb</a>   $('a').text()
+	    => <a></a>      $('a').text("bbb")
+	    
+	    => <a href="kkk" id="k"> ==> $('#k').attr("href")
+	    
+	    => <input type=text id="p" value="kkk"> => $('#p').val()  => $('#p').val("ddd")
+	    
+	    => <td><span>ooo</span></td>  ==> $('td span').text() ==> ooo
+	                                      $('td').text()  ==> ooo
+	                                      $('td').html() ==> <span>ooo</span>
+	     
+	*/
+	$('#delBtn').click(function(){
+		if(i==0)
+		{
+			$('#delBtn').val("취소");
+			$('#del').show();
+			i=1;
+		}
+		else
+		{
+			$('#delBtn').val("삭제");
+			$('#del').hide();
+			i=0;
+		}
+	});
+	
+	$('#sendBtn').click(function(){
+		var pwd=$('#pwd').val();
+		var no=$('#no').val();
+		var page=$('#page').val();
+		if(pwd=="")
+		{
+			$("#pwd").focus();
+			return;
+		}
+		// delete.jsp?no=1&pwd=1234  => 404,500,200
+		/*
+		     open('GET','delete.jsp',callback,true)
+		     send(no=1&pwd=1234)
+		
+		      if(req.readyState==4)
+		      {
+		    	  if(req.status==200)
+		    	  {
+		    		  
+		    	  }
+		      }
+		*/
+		$.ajax({
+			type:'POST',
+			url:'delete.jsp',
+			data:{"no":no,"pwd":pwd},
+			success:function(res)
+			{
+				//alert(res);
+				var result=res.trim();
+				if(result==0)
+				{
+					alert("비밀번호가 틀립니다!!");
+					$('#pwd').val("");
+					$('#pwd').focus();
+				}
+				else
+				{
+					location.href="list.jsp?page="+page;
+				}
+			}
+		});
+	});
+});
+</script>
 </head>
 <body>
     <div class="container">
@@ -56,8 +148,17 @@ h2 {
             <td colspan="4" class="text-right">
               <a href="reply.jsp?no=<%=vo.getNo() %>&page=<%=strPage %>" class="btn btn-xs btn-success">답변</a>
               <a href="update.jsp?no=<%=vo.getNo() %>&page=<%=strPage %>" class="btn btn-xs btn-primary">수정</a>
-              <a href="#" class="btn btn-xs btn-danger">삭제</a>
+              <input type=button class="btn btn-xs btn-danger" id="delBtn" value="삭제">
               <a href="list.jsp?page=<%=strPage %>" class="btn btn-xs btn-info">목록</a>
+            </td>
+          </tr>
+          <tr id="del" style="display:none">
+            <td colspan="4" class="text-right">
+                         비밀번호:<input type=password id=pwd size=10 class="input-sm" >
+                   <input type=hidden id="no" value="<%=no%>">
+                   <input type=hidden id="page" value="<%=strPage%>">
+                   <input type=button value="삭제" class="btn btn-sm btn-danger" id="sendBtn">
+                         
             </td>
           </tr>
         </table>

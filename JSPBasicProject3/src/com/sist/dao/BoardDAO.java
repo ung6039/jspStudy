@@ -314,6 +314,79 @@ public class BoardDAO {
 		  disConnection();
 	  }
   }
+  public int boardDelete(int no,String pwd)
+  {
+	  int result=0;
+	  try
+	  {
+		  getConnection();
+		  // 비밀번호 검색 
+		  String sql="SELECT pwd FROM replyBoard "
+				    +"WHERE no=?";
+		  ps=conn.prepareStatement(sql);
+		  ps.setInt(1, no);
+		  ResultSet rs=ps.executeQuery();
+		  rs.next();
+		  String db_pwd=rs.getString(1);
+		  rs.close();
+		  
+		  if(db_pwd.equals(pwd))
+		  {
+			  result=1;
+			  sql="SELECT root,depth FROM replyBoard "
+			     +"WHERE no=?";
+			  ps=conn.prepareStatement(sql);
+			  ps.setInt(1, no);
+			  rs=ps.executeQuery();
+			  rs.next();
+			  
+			  int root=rs.getInt(1);
+			  int depth=rs.getInt(2);
+			  rs.close();
+			  
+			  if(depth==0)
+			  {
+				  sql="DELETE FROM replyBoard "
+				     +"WHERE no=?";
+				  ps=conn.prepareStatement(sql);
+				  ps.setInt(1, no);
+				  ps.executeUpdate();
+			  }
+			  else
+			  {
+				  String msg="관리자가 삭제한 게시물입니다";
+				  sql="UPDATE replyBoard SET "
+					 +"subject=?,content=? "
+					 +"WHERE no=?";
+				  ps=conn.prepareStatement(sql);
+				  ps.setString(1, msg);
+				  ps.setString(2, msg);
+				  ps.setInt(3, no);
+				  ps.executeUpdate();
+				  
+				  sql="UPDATE replyBoard SET "
+				     +"depth=depth-1 "
+					 +"WHERE no=?";
+				  ps=conn.prepareStatement(sql);
+				  ps.setInt(1, root);
+				  ps.executeUpdate();
+			  }
+		  }
+		  else
+		  {
+			  result=0;
+		  }
+		  
+	  }catch(Exception ex)
+	  {
+		  ex.printStackTrace();
+	  }
+	  finally
+	  {
+		  disConnection();
+	  }
+	  return result;
+  }
   
 }
 

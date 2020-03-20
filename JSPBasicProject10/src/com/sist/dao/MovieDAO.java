@@ -4,7 +4,7 @@ import java.sql.*;
 import java.util.*;
 
 public class MovieDAO {
-	private Connection conn;
+	  private Connection conn;
 	  private PreparedStatement ps;
 	  private final String URL="jdbc:oracle:thin:@localhost:1521:XE";
 	  

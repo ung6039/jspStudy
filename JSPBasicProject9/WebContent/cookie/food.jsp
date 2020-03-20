@@ -34,10 +34,10 @@
                   <table class="table table-hover">
                    <tr>
                      <td width=30% class="text-center" rowspan="3">
-                       <a href="detail.jsp?no=<%=vo.getNo()%>"><img src="<%=vo.getImage() %>" width=350 height=180 class="img-rounded"></a>
+                       <a href="detail.jsp?no=<%=vo.getNo()%>&cateno=<%=cateno%>"><img src="<%=vo.getImage() %>" width=350 height=180 class="img-rounded"></a>
                      </td>
                      <td width=70%>
-                       <h3><a href="detail.jsp?no=<%=vo.getNo()%>"><%=vo.getTitle() %></a>&nbsp;<span style="color:#FC6"><%=vo.getScore() %></span></h3>
+                       <h3><a href="detail.jsp?no=<%=vo.getNo()%>&cateno=<%=cateno%>"><%=vo.getTitle() %></a>&nbsp;<span style="color:#FC6"><%=vo.getScore() %></span></h3>
                      </td>
                    </tr>
                    <tr>

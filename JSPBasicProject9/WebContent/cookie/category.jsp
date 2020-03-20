@@ -13,8 +13,11 @@
     	 if(cookies[i].getName().startsWith("food"))
     	 {
     		 String no=cookies[i].getValue();
-    		 FoodHouseBean vo=dao.foodDetailData(Integer.parseInt(no));
-    		 fList.add(vo);
+    		 if(no!=null)
+    		 {
+    		   FoodHouseBean vo=dao.foodDetailData(Integer.parseInt(no));
+    		   fList.add(vo);
+    		 }
     	 }
      }
 %>

@@ -3,6 +3,7 @@
 <jsp:useBean id="dao" class="com.sist.dao.FoodDAO"></jsp:useBean>
 <%
     String no=request.getParameter("no");
+    String cateno=request.getParameter("cateno");
     FoodHouseBean vo=dao.foodDetailData(Integer.parseInt(no));
     Cookie cookie=new Cookie("food"+no,no);
     cookie.setMaxAge(60*60*24);
@@ -90,7 +91,7 @@
           <td class="text-right" colspan="5">
             <a href="#" class="btn btn-sm btn-danger">찜</a>
             <a href="#" class="btn btn-sm btn-success">예약</a>
-            <a href="category.jsp" class="btn btn-sm btn-info">목록</a>
+            <a href="category.jsp?cateno=<%=cateno %>" class="btn btn-sm btn-info">목록</a>
           </td>
         </tr>
       </table>

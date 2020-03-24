@@ -76,8 +76,8 @@ public class MovieDAO {
 			  int end=rowSize*page;
 			  
 			  ps=conn.prepareStatement(sql);
-			  ps.setInt(1, start);
-			  ps.setInt(2, end);
+			  ps.setInt(1, start);//map.get("start")
+			  ps.setInt(2, end);// map.get("end")
 			  
 			  ResultSet rs=ps.executeQuery();
 			  while(rs.next())

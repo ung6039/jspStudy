@@ -57,9 +57,9 @@ h2 {
      <h2>JSTL를 이용한 구구단</h2>
      <table class="table table-hover">
        <tr class="danger">
-         <c:forEach var="i" begin="2" end="9">
+         <forEac var="i" begin="2" end="9">
            <th class="text-center">${i += "단"}</th>
-         </c:forEach>
+         </forEac>
        </tr>
        <c:forEach var="i" begin="1" end="9">
          <tr>

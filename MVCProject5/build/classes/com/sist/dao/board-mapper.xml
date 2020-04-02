@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- PreparedStatement , ResultSet -->
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sist.dao.board-mapper">
+  <!-- 
+             목록
+             public BoardVO boardListData(Map map) 
+             
+             public int movieTotalPage()
+             
+             resultType="int"
+             
+             List<ZipcodeBean> postfind(String dong)
+             resultType="ZipcodeBean" parameterType="String"
+             
+             public int idcheck(String id)
+             resultType="int" parameterType="String"
+             
+             Map map=new HashMap();
+             map.put("end",10)
+             map.put("start",1)
+             
+             #{start}  ==> map.get("start")
+             #{end}    ==> map.get("end")
+             
+             {}
+             
+             public List<BoardVO> boardListData(Map map) 
+                => selectList()
+   -->
+   <select id="boardListData" resultType="BoardVO" parameterType="java.util.Map">
+      SELECT no,subject,name,regdate,hit,TO_CHAR(regdate,'YYYY-MM-DD') as dbday,num
+      FROM (SELECT no,subject,name,regdate,hit,rownum as num 
+      FROM (SELECT no,subject,name,regdate,hit 
+      FROM board ORDER BY no DESC))
+      WHERE num BETWEEN #{start} AND #{end}
+   </select>
+   <!-- 
+          => selectOne()
+        public BoardVO boardDetailData(int no)
+        {
+        }
+        
+        Map map=new HashMap();
+        map.put("boardDetailData","SELECT * FROM board WHERE no=#{no}")
+    -->
+   <select id="boardTotalPage" resultType="int">
+     SELECT CEIL(COUNT(*)/10.0) FROM board
+   </select>
+   <sql id="where-no">
+     WHERE no=#{no}
+   </sql>
+   <select id="boardDetailData" resultType="BoardVO" parameterType="int">
+      SELECT * FROM board
+      <include refid="where-no"/>
+   </select>
+   <update id="hitIncrement" parameterType="int">
+      UPDATE board SET
+      hit=hit+1
+      <include refid="where-no"/>
+   </update>
+   <!-- 
+         public void boardInsert(BoardVO vo)
+    -->
+   <insert id="boardInsert" parameterType="BoardVO">
+     <selectKey keyProperty="no" resultType="int" order="BEFORE">
+       SELECT NVL(MAX(no)+1,1) as no FROM board
+     </selectKey>
+     <!-- 
+         rs.getInt(1) => rs.getInt("column명")
+         vo.setSubject("subject")
+         vo.setName("name")
+         INSERT INTO board VALUES(#{no},vo.getName(),vo.getSubject(),#{content},#{pwd},SYSDATE,0)
+      -->
+      INSERT INTO board VALUES(#{no},#{name},#{subject},#{content},#{pwd},SYSDATE,0)
+   </insert>
+   <!-- 
+         public void boardUpdate(BoardVO vo)
+    -->
+   <update id="boardUpdate" parameterType="BoardVO">
+     UPDATE board SET
+     name=#{name},subject=#{subject},content=#{content}
+     WHERE no=#{no}
+   </update>
+   <!-- 
+        public void boardDelete(int no)
+    -->
+   <!-- <delete id="boardDelete" parameterType="int"></delete> -->
+</mapper>
+
+
+
+
+
+
+
+
+

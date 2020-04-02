@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+   (cache-ref | cache? | resultMap* | parameterMap* | sql* | insert* | update* | delete* | select*)+
+ -->
+<mapper>
+<!-- 
+   (include | trim | where | set | foreach | choose | if | bind)*
+   name , sex, addr
+   SELECT name,sex,address FROM info
+   
+   table (caption?,tr+)
+   tr (th|td)*
+ -->
+  <select id="" resultType="1" parameterType="Map">
+   SELECT a,b,c,d FROM board where id=? AND pwd=?
+   WHERE num BETWEEN ? AND ?
+  </select>
+  
+  <insert id="" parameterType=""></insert>
+  <update id=""></update>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+

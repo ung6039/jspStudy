@@ -14,9 +14,12 @@ import java.util.*;
 public class DispatcherServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private List<String> list=new ArrayList<String>();
+	@Override
 	public void init(ServletConfig config) throws ServletException {
 		// Path (web.xml)
 		String path=config.getInitParameter("contextConfigLocation");
+		//String defaultPath=config.getInitParameter("defaultPath");
+		//System.out.println(defaultPath);
 		HandlerMapping hm=new HandlerMapping(path);
 		list=hm.getList();
 	}
@@ -58,6 +61,9 @@ public class DispatcherServlet extends HttpServlet {
 				 *    
 				 *    @RequestMapping("main/delete.do")
 				 *    메소드3
+				 *    
+				 *    if("aaa".equals(null))
+				 *    if(null.equals("aaa"))
 				 */
 				Class clsName=Class.forName(cls);
 				if(clsName.isAnnotationPresent(Controller.class)==false)
@@ -70,7 +76,7 @@ public class DispatcherServlet extends HttpServlet {
 				for(Method m:methods)
 				{
 					RequestMapping rm=m.getAnnotation(RequestMapping.class);
-					if(rm.value().equals(cmd))
+					if(cmd.equals(rm.value()))
 					{
 						String jsp=(String)m.invoke(obj, request,response);
 						//  return "redirect:list.do"
@@ -89,7 +95,7 @@ public class DispatcherServlet extends HttpServlet {
 					}
 				}
 			}
-		}catch(Exception ex){}
+		}catch(Exception ex){ex.printStackTrace();}
 		
 	}
 }

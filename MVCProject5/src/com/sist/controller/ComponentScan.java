@@ -1,13 +1,20 @@
 package com.sist.controller;
 import java.io.*;
 import java.util.*;
+import java.net.*;
 public class ComponentScan {
    public List<String> getClassNameRead(String pack)
    {
 	   List<String> list=new ArrayList<String>();
 	   try
 	   {
-	     String path="C:\\webDev\\webStudy\\MVCProject5\\src";
+	     String path="C:\\Users\\sist181\\jspStudy\\MVCProject5\\src";
+		 URL url=this.getClass().getResource(".");
+		 String path1=url.getPath();
+		 System.out.println("path1="+path1);
+		 // 
+		 //path1=path1.substring(1,path1.lastIndexOf("/build"));
+		 //System.out.println("path1="+path1);
 	     path=path+"\\"+pack.replace(".", "\\");
 	     File dir=new File(path);
 	     File[] files=dir.listFiles();
@@ -23,7 +30,7 @@ public class ComponentScan {
 	    		 list.add(s);
 	    	 }
 	     }
-	   }catch(Exception ex){}
+	   }catch(Exception ex){ex.printStackTrace();}
 	   return list;
    }
 }

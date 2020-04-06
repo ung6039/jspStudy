@@ -44,7 +44,7 @@ public class HandlerMapping {
     			}
     			
     		}
-    	}catch(Exception ex){}
+    	}catch(Exception ex){ex.printStackTrace();}
     }
 	public List<String> getList() {
 		return list;

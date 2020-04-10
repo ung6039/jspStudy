@@ -72,10 +72,28 @@
     FROM recipe
     WHERE rownum&lt;=21
     <if test="fd!='전체'">
-     <!-- AND title LIKE '%'||#{fd}||'%' -->
+     <!-- AND title LIKE '%'||#{fd}||'%' 
+           면|우동
+           REGEXP_LIKE(title,'면')
+           REGEXP_LIKE(title,'면|우동|라면')
+     -->
      AND REGEXP_LIKE(title,#{fd})
     </if>
   </select>
+  
+  <insert id="replyInsert" parameterType="BoardVO">
+    <selectKey keyProperty="no" resultType="int" order="BEFORE">
+      SELECT NVL(MAX(no)+1,1) as no FROM replyBoard
+    </selectKey>
+    INSERT INTO replyBoard(no,name,subject,content,pwd,group_id) VALUES(
+      #{no},
+      #{name},
+      #{subject},
+      #{content},
+      #{pwd},
+      (SELECT NVL(MAX(group_id)+1,1) FROM replyBoard)
+    )
+  </insert>
 </mapper>
 
 

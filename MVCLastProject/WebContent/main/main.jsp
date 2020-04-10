@@ -129,7 +129,15 @@ $(function(){
             <c:if test="${sessionScope.id!=null }">
               <li><a href="#">자유게시판</a></li>
             </c:if>
-            <li><a href="#">묻고답하기</a></li>
+            <li><a href="../reply/list.do">묻고답하기</a></li>
+            <%--
+                   reple/list.do =====> DispatcherServlet (Controller => 요청을 제어 => 응답 제어)
+                                        =================> Model들을 검색해서 
+                                                                                                                      메소드 찾기(어노테이션:RequestMapping)
+                                        Model => DAO연결해서 해당 JSP에 결과값 전송  
+                                        ============         ====
+                                                                                       요청처리 (Model)    결과값 출력(View)                                            
+             --%>
             <li><a href="#">자료실</a></li>
           </ul>
         </li>

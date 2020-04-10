@@ -98,6 +98,61 @@ public class ReplyBoardModel {
 	   //DAO연결
 	   return "redirect:../reply/list.do";
    }
+   
+   @RequestMapping("reply/update.do")
+   public String reply_update(HttpServletRequest request,HttpServletResponse response)
+   {
+	   String no=request.getParameter("no");
+	   BoardVO vo=ReplyBoardDAO.replyUpdateData(Integer.parseInt(no));
+	   request.setAttribute("vo", vo);
+	   request.setAttribute("main_jsp", "../reply/update.jsp");
+	   return "../main/main.jsp";
+   }
+   
+   @RequestMapping("reply/password_check.do")
+   public String reply_password_check(HttpServletRequest request,HttpServletResponse response)
+   {
+	   String no=request.getParameter("no");
+	   String pwd=request.getParameter("pwd");
+	   
+	   String db_pwd=ReplyBoardDAO.replyGetPassword(Integer.parseInt(no));
+	   int res=0;
+	   if(db_pwd.equals(pwd))
+	   {
+		   res=1;
+	   }
+	   else
+	   {
+		   res=0;
+	   }
+	   request.setAttribute("result", res);
+	   return "../reply/password_check.jsp";
+   }
+   
+   @RequestMapping("reply/update_ok.do")
+   public String reply_update_ok(HttpServletRequest request,HttpServletResponse response)
+   {
+	   try
+	   {
+		   request.setCharacterEncoding("UTF-8");
+	   }catch(Exception ex){}
+	   
+	   String no=request.getParameter("no");
+	   String name=request.getParameter("name");
+	   String subject=request.getParameter("subject");
+	   String content=request.getParameter("content");
+	   String pwd=request.getParameter("pwd");
+	   
+	   BoardVO vo=new BoardVO();
+	   vo.setName(name);
+	   vo.setSubject(subject);
+	   vo.setContent(content);
+	   vo.setPwd(pwd);
+	   vo.setNo(Integer.parseInt(no));
+	   
+	   ReplyBoardDAO.replyUpdate(vo);
+	   return "redirect:../reply/detail.do?no="+no;
+   }
 }
 
 

@@ -31,6 +31,15 @@
     FROM replyBoard
     WHERE no=#{no}
   </select>
+  <select id="replyGetPassword" resultType="string" parameterType="int">
+    SELECT pwd FROM replyBoard
+    WHERE no=#{no}
+  </select>
+  <update id="replyUpdate" parameterType="BoardVO">
+    UPDATE replyBoard SET
+    name=#{name},subject=#{subject},content=#{content}
+    WHERE no=#{no}
+  </update>
 </mapper>
 
 

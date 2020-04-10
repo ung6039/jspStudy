@@ -122,6 +122,78 @@ public class ReplyBoardDAO {
 	   }
 	   
    }
+   
+   public static BoardVO replyUpdateData(int no)
+   {
+	   BoardVO vo=new BoardVO();
+	   SqlSession session=null;
+	   try
+	   {
+		   session=ssf.openSession();
+		   vo=session.selectOne("replyDetailData", no);
+		   /*
+		    *     1) SQL
+		    *     2) PreparedStatement => 채우기
+		    *        ps.setString(1,"")
+		    *     3) ~VO
+		    */
+	   }catch(Exception ex)
+	   {
+		   System.out.println(ex.getMessage());
+	   }
+	   finally
+	   {
+		   if(session!=null)
+			   session.close();
+		   /*
+		    *   Connection , PreparedStatement 
+		    *   if(ps!=null) ps.close()
+		    *   if(conn!=null) conn.close()
+		    */
+	   }
+	   return vo;
+   }
+   
+   public static String replyGetPassword(int no)
+   {
+	   String pwd="";
+	   SqlSession session=null;
+	   try
+	   {
+		   session=ssf.openSession();
+		   pwd=session.selectOne("replyGetPassword",no);
+		   //System.out.println("DAO:pwd="+pwd);
+	   }catch(Exception ex)
+	   {
+		   System.out.println(ex.getMessage());
+	   }
+	   finally
+	   {
+		   if(session!=null)
+			    session.close();// 반환 => connection
+	   }
+	   return pwd;
+   }
+   
+   public static void replyUpdate(BoardVO vo)
+   {
+	   
+	   SqlSession session=null;
+	   try
+	   {
+		   session=ssf.openSession(true);
+		   session.update("replyUpdate",vo);
+	   }catch(Exception ex)
+	   {
+		   System.out.println(ex.getMessage());
+	   }
+	   finally
+	   {
+		   if(session!=null)
+			    session.close();// 반환 => connection
+	   }
+	   
+   }
 }
 
 

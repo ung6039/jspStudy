@@ -36,6 +36,46 @@
   <select id="chefTotalPage" resultType="int">
     SELECT CEIL(COUNT(*)/30.0) FROM chef
   </select>
+  
+  <select id="recipeDetailData" resultType="RecipeDetailVO" parameterType="int">
+    SELECT * 
+    FROM recipe_detail
+    WHERE no=#{no}
+  </select>
+  
+  <select id="recipeCount2" resultType="int" parameterType="int">
+    SELECT COUNT(*) 
+    FROM recipe_detail
+    WHERE no=#{no}
+  </select>
+  <!-- 
+        NO     NOT NULL NUMBER        
+		TITLE  NOT NULL VARCHAR2(300) 
+		POSTER NOT NULL VARCHAR2(300) 
+		CHEF   NOT NULL VARCHAR2(100)
+   -->
+  <select id="chefDetailData" resultType="RecipeVO" parameterType="java.util.Map">
+    SELECT no,title,poster,chef,num
+    FROM (SELECT no,title,poster,chef,rownum as num 
+    FROM (SELECT no,title,poster,chef 
+    FROM recipe WHERE chef LIKE '%'||#{chef}||'%'))
+    WHERE num BETWEEN #{start} AND #{end}
+  </select>
+  
+  <select id="chefDataTotalPage" resultType="int" parameterType="string">
+    SELECT CEIL(COUNT(*)/20.0) FROM recipe
+    WHERE chef LIKE '%'||#{chef}||'%'
+  </select>
+  
+  <select id="recipeFindData" resultType="RecipeVO" parameterType="java.util.Map">
+    SELECT no,title,chef,poster,rownum
+    FROM recipe
+    WHERE rownum&lt;=21
+    <if test="fd!='전체'">
+     <!-- AND title LIKE '%'||#{fd}||'%' -->
+     AND REGEXP_LIKE(title,#{fd})
+    </if>
+  </select>
 </mapper>
 
 

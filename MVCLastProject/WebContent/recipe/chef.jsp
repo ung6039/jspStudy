@@ -6,6 +6,11 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+<style type="text/css">
+.table,td {
+    background-color: white;
+ }
+</style>
 </head>
 <body>
 <div class="wrapper row2">
@@ -19,9 +24,9 @@
 		        <table class="table">
 		          <tr>
 		            <td width="30%" class="text-center" rowspan="2">
-		              <img src="${vo.poster }" class="img-circle" style="width:80px;height:80px">
+		              <a href="../recipe/chef_detail.do?name=${vo.chef }"><img src="${vo.poster }" class="img-circle" style="width:80px;height:80px"></a>
 		            </td>
-		            <td colspan="4"><h3><font color="#FC8">${vo.chef }</font></h3></td>
+		            <td colspan="4"><h3><font color="#FC8"><a href="../recipe/chef_detail.do?name=${vo.chef }">${vo.chef }</a></font></h3></td>
 		          </tr>
 		          <tr>
 		            <td class="text-center">

@@ -104,6 +104,110 @@ public class RecipeDAO {
 	    }
 	    return total;
    }
+   
+   public static RecipeDetailVO recipeDetailData(int no)
+   {
+	   RecipeDetailVO vo=new RecipeDetailVO();
+	   SqlSession session=null;
+	   try
+	   {
+		   session=ssf.openSession();
+		   vo=session.selectOne("recipeDetailData", no);
+	   }catch(Exception ex)
+	   {
+		   System.out.println(ex.getMessage());
+	   }
+	   finally
+	   {
+		   if(session!=null)
+			   session.close();
+	   }
+	   return vo;
+   }
+   
+   public static int recipeCount(int no)
+   {
+	    SqlSession session=null;
+	    int total=0;
+	    try
+	    {
+	    	session=ssf.openSession();
+	    	total=session.selectOne("recipeCount2",no);
+	    }catch(Exception ex)
+	    {
+	    	System.out.println(ex.getMessage());
+	    }
+	    finally
+	    {
+	    	if(session!=null)
+	    		session.close();
+	    }
+	    return total;
+   }
+   
+   
+   public static List<RecipeVO> chefDetailData(Map map)
+   {
+	    SqlSession session=null;
+	    List<RecipeVO> list=new ArrayList<RecipeVO>();
+	    try
+	    {
+	    	session=ssf.openSession();
+	    	list=session.selectList("chefDetailData",map);
+	    }catch(Exception ex)
+	    {
+	    	System.out.println(ex.getMessage());
+	    }
+	    finally
+	    {
+	    	if(session!=null)
+	    		session.close();
+	    }
+	    return list;
+   }
+   
+   public static int chefDataTotalPage(String chef)
+   {
+	    SqlSession session=null;
+	    int total=0;
+	    try
+	    {
+	    	session=ssf.openSession();
+	    	total=session.selectOne("chefDataTotalPage",chef);
+	    }catch(Exception ex)
+	    {
+	    	System.out.println(ex.getMessage());
+	    }
+	    finally
+	    {
+	    	if(session!=null)
+	    		session.close();
+	    }
+	    return total;
+   }
+   
+   public static List<RecipeVO> recipeFindData(String fd)
+   {
+	    SqlSession session=null;
+	    List<RecipeVO> list=new ArrayList<RecipeVO>();
+	    try
+	    {
+	    	session=ssf.openSession();
+	    	Map map=new HashMap();
+	    	map.put("fd", fd);
+	    	list=session.selectList("recipeFindData",map);
+	    }catch(Exception ex)
+	    {
+	    	System.out.println(ex.getMessage());
+	    }
+	    finally
+	    {
+	    	if(session!=null)
+	    		session.close();
+	    }
+	    return list;
+   }
+   
 }
 
 

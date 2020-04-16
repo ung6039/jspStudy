@@ -40,7 +40,82 @@
     name=#{name},subject=#{subject},content=#{content}
     WHERE no=#{no}
   </update>
+  <!-- 답변 관련 SQL -->
+  <!-- pno의 정보를 읽는다  -->
+  <select id="replyParentInfoData" resultType="BoardVO" parameterType="int">
+    SELECT group_id,group_step,group_tab 
+    FROM replyBoard
+    WHERE no=#{no}
+  </select>
+  <!-- 
+         ORDER BY group_id DESC,group_step ASC 
+                     gi   gs  gt 
+         AAA          2    0   0
+          =>GGG       2    1   1
+          =>BBB       2    2   1
+           =>CCC      2    3   2
+          
+        ============================
+         DDD          1
+          => EEE      1
+        ============================
+         KKK          0
+   -->
+  <update id="replyGroupStepIncrement" parameterType="BoardVO">
+    UPDATE replyBoard SET
+    group_step=group_step+1
+    WHERE group_id=#{group_id} AND group_step>#{group_step}
+  </update>
+  <insert id="replyReplyInsert" parameterType="BoardVO">
+    <selectKey keyProperty="no" resultType="int" order="BEFORE">
+      SELECT NVL(MAX(no)+1,1) as no FROM replyBoard
+    </selectKey>
+    INSERT INTO replyBoard(no,name,subject,content,pwd,group_id,group_step,group_tab,root)
+    VALUES(#{no},#{name},#{subject},#{content},#{pwd},
+      #{group_id},#{group_step},#{group_tab},#{root})
+  </insert>
+  <update id="replyDepthIncrement" parameterType="int">
+    UPDATE replyBoard SET 
+    depth=depth+1
+    WHERE no=#{no}
+  </update>
+  <!-- delete -->
+  <select id="replyDeleteInfoData" resultType="BoardVO" parameterType="int">
+    SELECT root,depth 
+    FROM replyBoard
+    WHERE no=#{no}
+  </select>
+  
+  <delete id="replyDelete" parameterType="int">
+    DELETE FROM replyBoard
+    WHERE no=#{no}
+  </delete>
+  <update id="replySubjectUpdate" parameterType="BoardVO">
+    UPDATE replyBoard SET
+    subject=#{subject},content=#{content}
+    WHERE no=#{no}
+  </update>
+  <update id="replyDepthDecrement" parameterType="int">
+    UPDATE replyBoard SET
+    depth=depth-1
+    WHERE no=#{no}
+  </update>
 </mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

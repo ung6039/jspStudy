@@ -40,7 +40,10 @@ function join()
 <style type="text/css">
 .row {
    margin: 0px auto;
-   width:700px;
+   width:1000px;
+}
+input,select{
+  display: inline-block;
 }
 </style>
 </head>

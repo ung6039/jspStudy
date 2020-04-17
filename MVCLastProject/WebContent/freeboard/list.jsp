@@ -1,43 +1,63 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
-<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
 </head>
 <body>
   <div class="wrapper row2">
   <div id="services" class="clear"> 
     <div class="row text-center">
-     <h1>자유게시판</h1>
+     <img src="../freeboard/jsp_board2.png" style="width:900px;height:200px;">
     </div>
-  <div class="row" id="root"></div>
-  <script type="text/babel">
-   class BoardList extends React.Component{
-      render(){
-         return (
-            <table className="table">
-             <thead>
-               <tr className="success">
-                 <th className="text-center" width="10%">번호</th>
-                 <th className="text-center" width="45%">제목</th>
-                 <th className="text-center" width="15%">이름</th>
-                 <th className="text-center" width="20%">작성일</th>
-                 <th className="text-center" width="10%">조회수</th>
-               </tr>
-             </thead>
-            </table>
-         )
-      }
-   }
-   ReactDOM.render(<BoardList/>,document.getElementById('root'))
-  </script>
-  </div>
+    <div class="row">
+    
+      <table class="table">
+       <tr>
+         <td>
+           <a href="../freeboard/insert.do" class="btn btn-sm btn-danger">새글</a>
+         </td>
+       </tr>
+     </table>
+     <table class="table">
+      <tr class="success">
+        <th width="10%" class="text-center">번호</th>
+        <th width="45%" class="text-center">제목</th>
+        <th width="15%" class="text-center">이름</th>
+        <th width="20%" class="text-center">작성일</th>
+        <th width="10%" class="text-center">조회수</th>
+      </tr>
+      <c:forEach var="vo" items="${list }">
+        <tr>
+            <td width="10%" class="text-center">${vo.no }</td>
+	        <td width="45%">
+	          <a href="../freeboard/detail.do?no=${vo.no }">${vo.subject }</a>
+	          &nbsp;
+	          <c:if test="${vo.dbday==today }">
+	            <sup><img src="../freeboard/new.gif"></sup>
+	          </c:if>
+	        </td>
+	        <td width="15%" class="text-center">${vo.name }</td>
+	        <td width="20%" class="text-center">
+	          ${vo.dbday }
+	        </td>
+	        <td width="10%" class="text-center">${vo.hit }</td>
+        </tr>
+      </c:forEach>
+     </table>
+    </div>
+    <div class="row text-center">
+      <a href="../freeboard/list.do?page=${curpage>1?curpage-1:curpage }" class="btn btn-sm btn-primary">이전</a>
+        ${curpage } page / ${totalpage } pages
+      <a href="../freeboard/list.do?page=${curpage<totalpage?curpage+1:curpage }" class="btn btn-sm btn-primary">다음</a>
+    </div>
+    </div>
+      
+    </div>
   </div>
   
 </body>

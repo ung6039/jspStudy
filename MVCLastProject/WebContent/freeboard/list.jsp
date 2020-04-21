@@ -31,11 +31,23 @@
         <th width="20%" class="text-center">작성일</th>
         <th width="10%" class="text-center">조회수</th>
       </tr>
+      <%--
+            $('a').click(function(){
+               var no=$(this).attr("data");
+               Shadowbox.open({
+				content:'../member/idcheck.do?no='+no,
+				title:'아이디 중복체크',
+				player:'iframe',
+				width:390,
+				height:200
+		})
+            });
+       --%>
       <c:forEach var="vo" items="${list }">
         <tr>
             <td width="10%" class="text-center">${vo.no }</td>
 	        <td width="45%">
-	          <a href="../freeboard/detail.do?no=${vo.no }">${vo.subject }</a>
+	          <a href="../freeboard/detail.do?no=${vo.no }" data="${vo.no }">${vo.subject }</a>
 	          &nbsp;
 	          <c:if test="${vo.dbday==today }">
 	            <sup><img src="../freeboard/new.gif"></sup>

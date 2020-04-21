@@ -47,6 +47,7 @@ $(function(){
 	*/
 	
 	$('#postBtn').click(function(){
+		
 		Shadowbox.open({
 			content:'../member/postfind.do',
 			title:'우편번호 검색',

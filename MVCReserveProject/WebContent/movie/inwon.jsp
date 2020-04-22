@@ -38,6 +38,9 @@ $(function(){
 		$('#movie-inwon2').text(res);
 		$('#movie-price').text(p);
 		
+		$('#rinwon').val(res);
+		$('#rprice').val(p);
+		
 		$('#resBtn').attr('disabled', false);
 	})
 });

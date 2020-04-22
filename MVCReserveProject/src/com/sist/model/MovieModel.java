@@ -2,12 +2,15 @@ package com.sist.model;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.sist.controller.Controller;
 import com.sist.controller.RequestMapping;
+import com.sist.dao.MemberVO;
 import com.sist.dao.MovieDAO;
 import com.sist.dao.MovieVO;
 import com.sist.dao.ReserveTheaterVO;
+import com.sist.dao.ReserveVO;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -148,14 +151,113 @@ public class MovieModel {
    {
 	   return "login.jsp";
    }
-   
+   /*
+    *   MVC ==> 
+    *       Model : ~VO,~DAO,~Model 
+    *       View : 화면에 출력 (JSP)
+    *                        request         request => 처리 내용을 첨부 (addAttribute())
+    *       Controller : 사용자 요청을 받아서 => 요청처리 내용을 전송 
+    *                    ===============================
+    *                                   배달 
+    *                                   
+    *                 .do                request                   request
+    *       Login.jsp ============> DispatcherServlet(Controller) =====> Model
+    *                  id,pwd                                     <=====
+    *                                                             request
+    *                  =======
+    *                  request.setAttribute("id","admin")
+    *                  톰캣
+    */
    @RequestMapping("movie/login_ok.do")
    public String movie_login_ok(HttpServletRequest request,HttpServletResponse response)
    {
 	   String id=request.getParameter("id");
 	   String pwd=request.getParameter("pwd");
+	   
+	   MemberVO vo=MovieDAO.movieLogin(id, pwd);
+	   if(vo.getMsg().equals("OK"))
+	   {
+		   HttpSession session=request.getSession();
+		   session.setAttribute("id", vo.getId());
+		   session.setAttribute("name", vo.getName());
+		   session.setAttribute("admin", vo.getAdmin());
+	   }
+	   request.setAttribute("vo", vo);
 	   //DAO
-	   return "login_ok.jsp";
+	   return "login_ok.jsp"; // Controller : sendRedirect(".do"),forward:.jsp
+   }
+   
+   @RequestMapping("movie/admin.do")
+   public String movie_admin(HttpServletRequest request,HttpServletResponse response)
+   {
+	   List<ReserveVO> list=MovieDAO.movieAdmin();
+	   request.setAttribute("list", list);
+	   return "admin.jsp";
+   }
+   
+   @RequestMapping("movie/mypage.do")
+   public String movie_mypage(HttpServletRequest request,HttpServletResponse response)
+   {
+	   HttpSession session=request.getSession();
+	   String id=(String)session.getAttribute("id");
+	   
+	   List<ReserveVO> list=MovieDAO.movieMyPage(id);
+	   request.setAttribute("list", list);
+	   return "mypage.jsp";
+   }
+   
+   @RequestMapping("movie/reserve_ok.do")
+   public String movie_reserve_ok(HttpServletRequest request,HttpServletResponse response)
+   {
+	   try
+	   {
+		   request.setCharacterEncoding("UTF-8");
+	   }catch(Exception ex){}
+	   ReserveVO vo=new ReserveVO();
+	   String mno=request.getParameter("mno");
+	   String tname=request.getParameter("tname");
+	   String rdate=request.getParameter("rdate");
+	   String rtime=request.getParameter("rtime");
+	   String rinwon=request.getParameter("rinwon");
+	   String rprice=request.getParameter("rprice");
+	   
+	   HttpSession session=request.getSession();
+	   String id=(String)session.getAttribute("id");
+	   vo.setMno(Integer.parseInt(mno));
+	   vo.setTname(tname);
+	   vo.setRdate(rdate);
+	   vo.setRtime(rtime);
+	   vo.setRinwon(rinwon);
+	   vo.setRprice(rprice);
+	   vo.setId(id);
+	   System.out.println(tname);
+	   System.out.println(rdate);
+	   System.out.println(rtime);
+	   System.out.println(rinwon);
+	   System.out.println(rprice);
+	   System.out.println(id);
+	   // DAO => INSERT
+	   MovieDAO.movieReserveOk(vo);
+	   return "redirect:mypage.do";
+   }
+   
+   @RequestMapping("movie/admin_update.do")
+   public String movie_admin_update(HttpServletRequest request,HttpServletResponse response)
+   {
+	   String rno=request.getParameter("rno");
+	   // DAO => update
+	   MovieDAO.adminUpdate(Integer.parseInt(rno));
+	   return "redirect:admin.do";
+   }
+   
+   @RequestMapping("movie/reserve_result.do")
+   public String movie_reserve_result(HttpServletRequest request,HttpServletResponse response)
+   {
+	   String mno=request.getParameter("mno");
+	   // DAO
+	   MovieVO vo=MovieDAO.reserveResultData(Integer.parseInt(mno));
+	   request.setAttribute("vo", vo);
+	   return "reserve_result.jsp";
    }
 }
 

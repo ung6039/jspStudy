@@ -9,6 +9,6 @@ public class MemberVO {
    private String id;
    private String name;
    private String msg;
-   private int admin;
+   private String admin;
    private String pwd;
 }

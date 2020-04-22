@@ -47,6 +47,53 @@
     SELECT id,admin,name,pwd FROM member
     WHERE id=#{id}
   </select>
+  <!-- 
+                        RNO          NUMBER : 자동 증가        
+						ID           VARCHAR2(20)  : session
+						MNO          NUMBER  : 영화번호       
+						TNAME        VARCHAR2(100) : 극장
+						RDATE        VARCHAR2(100) : 날짜
+						RTIME        VARCHAR2(100) : 시간
+						RINWON       VARCHAR2(20)  : 인원
+						RPRICE       VARCHAR2(20)  : 금액
+						ISRESERVE    NUMBER        : 0 => 승인 (1)
+   -->
+  <insert id="movieReserveOk" parameterType="ReserveVO">
+    <selectKey keyProperty="rno" resultType="int" order="BEFORE">
+      SELECT NVL(MAX(rno)+1,1) as rno FROM reserve
+    </selectKey>
+    INSERT INTO reserve VALUES(
+      #{rno},
+      #{id},#{mno},#{tname},#{rdate},#{rtime},#{rinwon},#{rprice},0
+    )
+  </insert>
+  <!-- mypage -->
+  <select id="movieMyPage" resultType="ReserveVO" parameterType="string">
+    SELECT rno,mno,(SELECT poster FROM movie WHERE mno=reserve.mno) as poster,
+           (SELECT title FROM movie WHERE mno=reserve.mno) as title,
+           tname,rdate,rtime,rinwon,rprice,isreserve
+    FROM reserve
+    WHERE id=#{id}
+    ORDER BY rno DESC
+  </select>
+  <select id="movieAdmin" resultType="ReserveVO">
+    SELECT rno,mno,id,(SELECT poster FROM movie WHERE mno=reserve.mno) as poster,
+           (SELECT title FROM movie WHERE mno=reserve.mno) as title,
+           tname,rdate,rtime,rinwon,rprice,isreserve
+    FROM reserve
+    ORDER BY rno DESC
+  </select>
+  
+  <update id="adminUpdate" parameterType="int">
+    UPDATE reserve SET
+    isReserve=1
+    WHERE rno=#{rno}
+  </update>
+  
+  <select id="reserveResultData" resultType="MovieVO" parameterType="int">
+    SELECT * FROM movie
+    WHERE mno=#{mno}
+  </select>
 </mapper>
 
 

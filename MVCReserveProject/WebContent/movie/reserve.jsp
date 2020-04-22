@@ -117,7 +117,29 @@ $(function(){
             </tr>
             <tr>
               <td class="text-center">
-                <input type=button value="예매하기" class="btn btn-sm btn-danger" disabled id="resBtn">
+                <form method="post" action="reserve_ok.do">
+                 <%--
+                        RNO          NUMBER : 자동 증가        
+						ID           VARCHAR2(20)  : session
+						MNO          NUMBER  : 영화번호       
+						TNAME        VARCHAR2(100) : 극장
+						RDATE        VARCHAR2(100) : 날짜
+						RTIME        VARCHAR2(100) : 시간
+						RINWON       VARCHAR2(20)  : 인원
+						RPRICE       VARCHAR2(20)  : 금액
+						ISRESERVE    NUMBER        : 0 => 승인 (1)
+                  --%>
+                 <input type=hidden name=mno value="" id="mno"> 
+                 <input type=hidden name=tname value="" id="tname"> 
+                 <input type=hidden name=rdate value="" id="rdate"> 
+                 <input type=hidden name=rinwon value="" id="rinwon"> 
+                 <input type=hidden name=rtime value="" id="rtime"> 
+                 <input type=hidden name=rprice value="" id="rprice"> 
+                 
+                 <input type=submit value="예매하기" class="btn btn-sm btn-danger" disabled id="resBtn">
+                 <a href="mypage.do" class="btn btn-sm btn-primary">마이페이지</a>
+                </form>
+                
               </td>
             </tr>
           </table>

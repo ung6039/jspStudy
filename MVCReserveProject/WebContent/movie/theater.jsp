@@ -22,6 +22,7 @@ $(function(){
 		//alert("loc="+loc+"\nname="+name);
 		var theater=name+"("+loc+")";
 		$('#movie-theater2').text(theater);
+		$('#tname').val(theater);
 		
 		var year=$('#year').val();
 		var month=$('#month').val();

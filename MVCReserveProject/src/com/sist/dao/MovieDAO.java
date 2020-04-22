@@ -154,6 +154,142 @@ public class MovieDAO {
 	   }
 	   return result;
    }
+   public static MemberVO movieLogin(String id,String pwd)
+   {
+	   MemberVO vo=new MemberVO();
+	   SqlSession session=null;
+	   try
+	   {
+		   // Connection => getConnection()
+		   session=ssf.openSession();
+		   int count=session.selectOne("movieIdCount",id);
+		   if(count==0)
+		   {
+			   vo.setMsg("NOID");
+		   }
+		   else
+		   {
+			   //ID가 존재하는 상태 
+			   MemberVO mvo=session.selectOne("movieGetPwd", id);
+			   if(pwd.equals(mvo.getPwd()))
+			   {
+				   vo.setMsg("OK");
+				   vo.setId(mvo.getId());
+				   vo.setAdmin(mvo.getAdmin());
+				   vo.setName(mvo.getName());
+			   }
+			   else
+			   {
+				   vo.setMsg("NOPWD");
+			   }
+		   }
+	   }catch(Exception ex)
+	   {
+		   ex.printStackTrace();
+	   }
+	   finally
+	   {
+		   if(session!=null)
+			   session.close(); // 반환 
+	   }
+	   return vo;
+   }
+   
+   public static void movieReserveOk(ReserveVO vo)
+   {
+	   SqlSession session=null;
+	   try
+	   {
+		   session=ssf.openSession(true);
+		   session.insert("movieReserveOk",vo);
+	   }catch(Exception ex)
+	   {
+		   ex.printStackTrace();
+	   }
+	   finally
+	   {
+		   if(session!=null)
+			   session.close();
+	   }
+   }
+   
+   public static List<ReserveVO> movieMyPage(String id)
+   {
+	   List<ReserveVO> list=new ArrayList<ReserveVO>();
+	   SqlSession session=null;
+	   try
+	   {
+		   session=ssf.openSession();
+		   list=session.selectList("movieMyPage",id);
+	   }catch(Exception ex)
+	   {
+		   ex.printStackTrace();
+	   }
+	   finally
+	   {
+		   if(session!=null)
+			   session.close();
+	   }
+	   return list;
+   }
+   
+   public static List<ReserveVO> movieAdmin()
+   {
+	   List<ReserveVO> list=new ArrayList<ReserveVO>();
+	   SqlSession session=null;
+	   try
+	   {
+		   session=ssf.openSession();
+		   list=session.selectList("movieAdmin");
+	   }catch(Exception ex)
+	   {
+		   ex.printStackTrace();
+	   }
+	   finally
+	   {
+		   if(session!=null)
+			   session.close();
+	   }
+	   return list;
+   }
+   
+   public static void adminUpdate(int rno)
+   {
+	   SqlSession session=null;
+	   try
+	   {
+		   session=ssf.openSession(true);
+		   session.update("adminUpdate",rno);
+	   }catch(Exception ex)
+	   {
+		   ex.printStackTrace();
+	   }
+	   finally
+	   {
+		   if(session!=null)
+			   session.close();
+	   }
+   }
+   
+   public static MovieVO reserveResultData(int mno)
+   {
+	   MovieVO vo=new MovieVO();
+	   SqlSession session=null;
+	   try
+	   {
+		   session=ssf.openSession();
+		   vo=session.selectOne("reserveResultData", mno);
+	   }catch(Exception ex)
+	   {
+		   ex.printStackTrace();
+	   }
+	   finally
+	   {
+		   if(session!=null)
+			   session.close();
+	   }
+	   return vo;
+   }
 }
 
 

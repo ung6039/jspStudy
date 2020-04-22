@@ -20,7 +20,7 @@ $(function(){
 		$('#movie-poster').attr("src",poster);
 		$('#movie-title').text($(this).text());
 		$('#movie-score').text($(this).attr('data-score'));
-		
+		$('#mno').val($(this).attr('data-mno'));
 		var tno=$(this).attr("data-theater");
 		$.ajax({
 			type:'post',
@@ -44,7 +44,7 @@ $(function(){
          <td>
            <img src="${vo.poster }" width=35 height=35>
          </td>
-         <td class="movie_title" data-poster="${vo.poster }" data-score="${vo.score }" data-theater="${vo.theaterNo }">${vo.title }</td>
+         <td class="movie_title" data-poster="${vo.poster }" data-score="${vo.score }" data-theater="${vo.theaterNo }" data-mno="${vo.mno }">${vo.title }</td>
         </tr>
       </c:forEach>
     </table>

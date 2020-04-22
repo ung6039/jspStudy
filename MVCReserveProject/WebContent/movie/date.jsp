@@ -52,6 +52,16 @@ $(function(){
 		
 		var rday=year+"년 "+month+"월 "+day+"일";
 		$('#movie-date2').text(rday);
+		
+		$.ajax({
+			type:'post',
+			url:'time.do',
+			data:{"tno":day},
+			success:function(res)
+			{
+				$('#movie-time').html(res);
+			}
+		})
 	});
 	
 });

@@ -114,6 +114,46 @@ public class MovieDAO {
 			   session.close();
 	   }
    }
+   
+   public static String movieTimeData(int tno)
+   {
+	   String result="";
+	   SqlSession session=null;
+	   try
+	   {
+		   session=ssf.openSession();
+		   result=session.selectOne("movieTimeData", tno);
+	   }catch(Exception ex)
+	   {
+		   ex.printStackTrace();
+	   }
+	   finally
+	   {
+		   if(session!=null)
+			   session.close();
+	   }
+	   return result;
+   }
+   // List=> forEach in()
+   public static String movieTimeData2(int tno)
+   {
+	   String result="";
+	   SqlSession session=null;
+	   try
+	   {
+		   session=ssf.openSession();
+		   result=session.selectOne("movieTimeData2", tno);
+	   }catch(Exception ex)
+	   {
+		   ex.printStackTrace();
+	   }
+	   finally
+	   {
+		   if(session!=null)
+			   session.close();
+	   }
+	   return result;
+   }
 }
 
 

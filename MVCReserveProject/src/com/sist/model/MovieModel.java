@@ -118,6 +118,45 @@ public class MovieModel {
 	   request.setAttribute("strWeek", strWeek);
 	   return "date.jsp";
    }
+   
+   @RequestMapping("movie/time.do")
+   public String movie_time(HttpServletRequest request,HttpServletResponse response)
+   {
+	   String tno=request.getParameter("tno");
+	   String times=MovieDAO.movieTimeData(Integer.parseInt(tno));
+	   // 1 6 7 8 9...
+	   StringTokenizer st=new StringTokenizer(times,",");
+	   List<String> list=new ArrayList<String>();
+	   while(st.hasMoreTokens())
+	   {
+		   String time=MovieDAO.movieTimeData2(Integer.parseInt(st.nextToken()));
+		   list.add(time);
+	   }
+	   
+	   request.setAttribute("tList", list);
+	   return "time.jsp";
+   }
+   
+   @RequestMapping("movie/inwon.do")
+   public String movie_inwon(HttpServletRequest request,HttpServletResponse response)
+   {
+	   return "inwon.jsp";
+   }
+   
+   @RequestMapping("movie/login.do")
+   public String movie_login(HttpServletRequest request,HttpServletResponse response)
+   {
+	   return "login.jsp";
+   }
+   
+   @RequestMapping("movie/login_ok.do")
+   public String movie_login_ok(HttpServletRequest request,HttpServletResponse response)
+   {
+	   String id=request.getParameter("id");
+	   String pwd=request.getParameter("pwd");
+	   //DAO
+	   return "login_ok.jsp";
+   }
 }
 
 

@@ -18,6 +18,7 @@
     <typeAlias type="com.sist.dao.ReserverTimeVO" alias="ReserverTimeVO"/>
     <typeAlias type="com.sist.dao.ReserveDateVO" alias="ReserveDateVO"/>
     <typeAlias type="com.sist.dao.ReserveVO" alias="ReserveVO"/>
+    <typeAlias type="com.sist.dao.MemberVO" alias="MemberVO"/>
   </typeAliases>
   <environments default="development">
     <environment id="development">

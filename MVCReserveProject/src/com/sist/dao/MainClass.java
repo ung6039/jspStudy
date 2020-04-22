@@ -7,14 +7,14 @@ public class MainClass {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		for(int i=1;i<=15;i++)
+		for(int i=1;i<=31;i++)
 		{
 			String res=movieRandomData(15);
 			System.out.println(i+":"+res);
-		    ReserveTheaterVO vo=new ReserveTheaterVO();
+		    ReserveDateVO vo=new ReserveDateVO();
 		    vo.setTno(i);
-		    vo.setTdate(res);
-		    MovieDAO.movieDateUpdate(vo);
+		    vo.setTime(res);
+		    MovieDAO.movieTimeUpdate(vo);
 		}
 
 	}
@@ -22,7 +22,7 @@ public class MainClass {
 	public static String movieRandomData(int count)
 	{
 		String result="";
-		int no=(int)(Math.random()*6)+10;
+		int no=(int)(Math.random()*4)+7;
 		int[] com=new int[no];
 		int rand=0;
 		boolean bCheck=false;
@@ -31,7 +31,7 @@ public class MainClass {
 			bCheck=true;
 			while(bCheck)
 			{
-				rand=(int)(Math.random()*31)+1;
+				rand=(int)(Math.random()*29)+1;
 				bCheck=false;
 				for(int j=0;j<i;j++)
 				{

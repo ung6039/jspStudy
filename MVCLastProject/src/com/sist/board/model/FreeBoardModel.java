@@ -9,6 +9,7 @@ import com.sist.controller.RequestMapping;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import com.sist.dao.*;
+import com.sist.vo.BoardReplyVO;
 import com.sist.vo.BoardVO;
 
 @Controller
@@ -80,12 +81,31 @@ public class FreeBoardModel {
    @RequestMapping("freeboard/detail.do")
    public String freeboard_detail(HttpServletRequest request,HttpServletResponse response)
    {
-	   String no=request.getParameter("no");
+	   String no=request.getParameter("no");//bno
+	   String page=request.getParameter("page");
+	   if(page==null)
+		   page="1";
+	   int curpage=Integer.parseInt(page);
+	   Map map=new HashMap();
+	   int rowSize=10;
+	   int start=(curpage*rowSize)-(rowSize-1);
+	   int end=curpage*rowSize;
+	   map.put("pStart", start);
+	   map.put("pEnd", end);
+	   map.put("pBno", Integer.parseInt(no));
+	   List<BoardReplyVO> list=FreeBoardReplyDAO.replyListData(map);
+	   
+	   map=new HashMap();
+	   map.put("pBno", Integer.parseInt(no));
+	   int totalpage=FreeBoardReplyDAO.replyTotalPage(map);
 	   // no주고 => vo를 받는다 
 	   FreeBoardDAO dao=new FreeBoardDAO();
 	   // vo를 받아온다 
 	   BoardVO vo=dao.freeboardInfoData(Integer.parseInt(no), 1);
 	   // jsp로 보내준다 
+	   request.setAttribute("list", list);
+	   request.setAttribute("curpage", curpage);
+	   request.setAttribute("totalpage", totalpage);
 	   request.setAttribute("vo", vo);
 	   request.setAttribute("main_jsp", "../freeboard/detail.jsp");
 	   return "../main/main.jsp";

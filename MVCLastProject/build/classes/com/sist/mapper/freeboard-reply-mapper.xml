@@ -83,6 +83,51 @@
      <select id="replyTotalPage2" parameterMap="replyTotalMap" statementType="CALLABLE">
        {CALL replyTotalPage(?,?)}
      </select>
+     
+     <!-- 
+         CREATE OR REPLACE PROCEDURE replyUpdate(
+		   pNo freeboard_reply.no%TYPE,
+		   pMsg freeboard_reply.msg%TYPE
+		 )
+      -->
+     <parameterMap type="hashmap" id="replyUpdateMap">
+       <parameter property="pNo" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+       <parameter property="pMsg" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+     </parameterMap> 
+     <select id="replyUpdate2" parameterMap="replyUpdateMap" statementType="CALLABLE">
+       {CALL replyUpdate(?,?)}
+     </select>
+     <!-- 
+         CREATE OR REPLACE PROCEDURE replyReplyInsert(
+		   pBno freeboard_reply.bno%TYPE,
+		   pPno freeboard_reply.no%TYPE,
+		   pId member.id%TYPE,
+		   pName member.name%TYPE,
+		   pMsg freeboard_reply.msg%TYPE
+		)
+      -->
+     <parameterMap type="hashmap" id="replyReplyInsertMap">
+       <parameter property="pBno" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+       <parameter property="pPno" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+       <parameter property="pId" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+       <parameter property="pName" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+       <parameter property="pMsg" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+     </parameterMap>
+     <select id="replyReplyInsert2" parameterMap="replyReplyInsertMap" statementType="CALLABLE">
+       {CALL replyReplyInsert(?,?,?,?,?)}
+     </select>
+     
+     <parameterMap type="hashmap" id="replyDeleteMap">
+       <parameter property="pNo" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+     </parameterMap> 
+     <select id="replyDelete2" parameterMap="replyDeleteMap" statementType="CALLABLE">
+       {CALL replyDelete(?)}
+     </select>
+     
+     <select id="replyCount" parameterType="int" resultType="int">
+       SELECT COUNT(*) FROM freeboard_reply
+       WHERE bno=#{bno}
+     </select>
 </mapper>
 
 

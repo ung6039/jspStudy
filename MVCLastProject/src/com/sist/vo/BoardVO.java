@@ -23,5 +23,6 @@ public class BoardVO {
    private String filename;
    private String filesize;
    private int type;
+   private int count;
    
 }

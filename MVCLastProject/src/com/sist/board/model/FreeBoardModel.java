@@ -2,6 +2,7 @@ package com.sist.board.model;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.sist.controller.Controller;
 import com.sist.controller.RequestMapping;
@@ -30,6 +31,10 @@ public class FreeBoardModel {
 	   int curpage=Integer.parseInt(page);
 	   FreeBoardDAO dao=new FreeBoardDAO();
 	   List<BoardVO> list=dao.freeboardListData(curpage);
+	   for(BoardVO vo:list)
+	   {
+		   vo.setCount(FreeBoardReplyDAO.replyCount(vo.getNo()));
+	   }
 	   int totalpage=dao.freeboardTotalPage();
 	   
 	   request.setAttribute("curpage", curpage);
@@ -186,6 +191,85 @@ public class FreeBoardModel {
 	   return "../freeboard/delete_ok.jsp";
    }
    
+   @RequestMapping("freeboard/reply_insert.do")
+   public String freeboard_reply_insert(HttpServletRequest request,HttpServletResponse response)
+   {
+	   try
+	   {
+		   request.setCharacterEncoding("UTF-8");
+	   }catch(Exception ex){}
+	   String bno=request.getParameter("bno");
+	   String msg=request.getParameter("msg");
+	   HttpSession session=request.getSession();// request=>Session,Cookie
+	   String id=(String)session.getAttribute("id");
+	   String name=(String)session.getAttribute("name");
+	   
+	   // DAO => Map에 묶어서 전송
+	   Map<String,Object> map=new HashMap<String,Object>();
+	   map.put("pBno", Integer.parseInt(bno));
+	   map.put("pId", id);
+	   map.put("pName", name);
+	   map.put("pMsg", msg);
+	   // insert 처리 
+	   FreeBoardReplyDAO.replyInsert(map);
+	   return "redirect:../freeboard/detail.do?no="+bno;
+   }
+   
+   @RequestMapping("freeboard/reply_update.do")
+   public String freeboard_reply_update(HttpServletRequest request,HttpServletResponse response)
+   {
+	   try
+	   {
+		   request.setCharacterEncoding("UTF-8");
+	   }catch(Exception ex){}
+	   String bno=request.getParameter("bno");
+	   String no=request.getParameter("no");
+	   String msg=request.getParameter("msg");
+	   
+	   Map map=new HashMap();
+	   map.put("pNo", Integer.parseInt(no));
+	   map.put("pMsg", msg);
+	   
+	   FreeBoardReplyDAO.replyUpdate(map);
+	   return "redirect:../freeboard/detail.do?no="+bno;
+   }
+   
+   @RequestMapping("freeboard/reply_reply_insert.do")
+   public String freeboard_reply_reply_insert(HttpServletRequest request,HttpServletResponse response)
+   {
+	   try
+	   {
+		  request.setCharacterEncoding("UTF-8");   
+	   }catch(Exception ex){}
+	   
+	   String bno=request.getParameter("bno");
+	   String pno=request.getParameter("pno");
+	   String msg=request.getParameter("msg");
+	   HttpSession session=request.getSession();
+	   String id=(String)session.getAttribute("id");
+	   String name=(String)session.getAttribute("name");
+	   
+	   Map map=new HashMap();
+	   map.put("pBno", Integer.parseInt(bno));
+	   map.put("pPno", Integer.parseInt(pno));
+	   map.put("pId", id);
+	   map.put("pName", name);
+	   map.put("pMsg", msg);
+	   // DAO
+	   FreeBoardReplyDAO.replyReplyInsert(map);
+	   return "redirect:../freeboard/detail.do?no="+bno;
+   }
+   @RequestMapping("freeboard/reply_delete.do")
+   public String freeboard_reply_delete(HttpServletRequest request,HttpServletResponse response)
+   {
+	   String no=request.getParameter("no");
+	   String bno=request.getParameter("bno");
+	   Map map=new HashMap();
+	   map.put("pNo", Integer.parseInt(no));
+	   // DAO
+	   FreeBoardReplyDAO.replyDelete(map);
+	   return "redirect:../freeboard/detail.do?no="+bno;
+   }
 }
 
 

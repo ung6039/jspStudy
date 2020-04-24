@@ -47,7 +47,7 @@
         <tr>
             <td width="10%" class="text-center">${vo.no }</td>
 	        <td width="45%">
-	          <a href="../freeboard/detail.do?no=${vo.no }" data="${vo.no }">${vo.subject }</a>
+	          <a href="../freeboard/detail.do?no=${vo.no }" data="${vo.no }">${vo.subject }(${vo.count })</a>
 	          &nbsp;
 	          <c:if test="${vo.dbday==today }">
 	            <sup><img src="../freeboard/new.gif"></sup>
